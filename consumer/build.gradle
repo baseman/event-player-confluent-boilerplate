@@ -1,0 +1,56 @@
+apply plugin: 'kotlin-platform-jvm'
+apply plugin: 'org.junit.platform.gradle.plugin'
+
+buildscript {
+    ext.kotlin_version = '1.2.51'
+
+    repositories {
+        mavenCentral()
+        maven { url "http://dl.bintray.com/jetbrains/spek" }
+        maven { url "http://repo.spring.io/plugins-release/" }
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.0'
+    }
+}
+
+repositories {
+    mavenCentral()
+    maven { url "http://dl.bintray.com/jetbrains/spek" }
+    maven { url "http://repo.spring.io/plugins-release/" }
+    maven { url "http://packages.confluent.io/maven/" }
+
+}
+
+junitPlatform {
+    filters {
+        engines {
+            include 'spek'
+        }
+    }
+}
+
+dependencies {
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    expectedBy project(":common")
+    expectedBy project(":event-player")
+    compile project(":kafka-utils")
+
+    compile 'org.apache.kafka:kafka-clients:0.11.0.0'
+    compile 'io.confluent:kafka-avro-serializer:3.2.1'
+
+    compile "org.apache.avro:avro:1.8.2"
+    compile "com.fasterxml.jackson.dataformat:jackson-dataformat-avro:2.9.5"
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'co.remotectrl.consumer.ConsumerKt'
+    }
+
+    // This line of code recursively collects and copies all of a project's files
+    // and adds them to the JAR itself. One can extend this task, to skip certain
+    // files or particular types at will
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+}
