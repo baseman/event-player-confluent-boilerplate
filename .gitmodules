@@ -1,3 +1,6 @@
 [submodule "event-player"]
 	path = event-player
 	url = https://github.com/baseman/event-player
+[submodule "kafka-utils"]
+	path = kafka-utils
+	url = https://github.com/baseman/kafka-utils
