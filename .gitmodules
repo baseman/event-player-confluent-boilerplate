@@ -4,3 +4,6 @@
 [submodule "kafka-utils"]
 	path = kafka-utils
 	url = https://github.com/baseman/kafka-utils
+[submodule "avro-util"]
+	path = avro-util
+	url = https://github.com/baseman/avro-util
